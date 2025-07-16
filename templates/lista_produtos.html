@@ -255,17 +255,17 @@
             <!--Uma linha de produtos-->
             <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-3">            
 
-
+            {% for produto in produtos %}
                 <!-- Um card de produto -->
                 <div class="col">
                     <div class="card h-100 shadow-sm"> <img
-                            src={{ img_produto }}
+                            src="{{ produto[0] }}"
                             class="card-img-top" alt="...">
                         <div class="label-top shadow-sm">DELL</div>
                         <div class="card-body">
-                            <div class="clearfix mb-3"> <span class="float-start price-hp">R$ {{ preco_produto }};</span> <span
+                            <div class="clearfix mb-3"> <span class="float-start price-hp">R$ {{ produto[1] }};</span> <span
                                     class="float-end"><a class="text-muted small" href="#">Reviews</a></span> </div>
-                            <h5 class="card-title"> {{ nome_produto }} </h5>
+                            <h5 class="card-title"> {{ produto[2] }} </h5>
                             <div class="text-center my-4"> <a href="#" class="btn btn-warning">Check offer</a> </div>
                             <div class="clearfix mb-1"> <span class="float-start"><i
                                         class="far fa-question-circle"></i></span> <span class="float-end"><i
@@ -274,11 +274,12 @@
                     </div>
                 </div>
                 <!-- Fim card produto -->
-                
-
+            {% endfor %}    
 
             </div>
+
             <!-- Fim linha de produtos-->
+        
         </div>
     </main>
 
