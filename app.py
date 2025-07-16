@@ -1,37 +1,16 @@
 import flask
+import sqlite3
 
 app = flask.Flask(__name__)
 
-lista_de_produtos = [
-    (
-        'https://www.freepnglogos.com/uploads/notebook-png/download-laptop-notebook-png-image-png-image-pngimg-2.png',
-        '150,00',
-        'Coisa 1'
-    ),
-
-    (
-        'https://www.freepnglogos.com/uploads/notebook-png/download-laptop-notebook-png-image-png-image-pngimg-2.png',
-        '250,00',
-        'Coisa 2'
-    ),
-
-    (
-        'https://www.freepnglogos.com/uploads/notebook-png/download-laptop-notebook-png-image-png-image-pngimg-2.png',
-        '350,00',
-        'Coisa 3'
-    ),
-
-    (
-        'https://www.freepnglogos.com/uploads/notebook-png/download-laptop-notebook-png-image-png-image-pngimg-2.png',
-        '450,00',
-        'Coisa 4'
-    )
-
-]
-
 @app.get('/')
 def get_home():
-   
+    sql_select_produtos = '''
+    SELECT img, preco, nome FROM produtos;
+'''
+    with sqlite3.Connection('produtos.db') as conn:
+        lista_de_produtos = conn.execute(sql_select_produtos)
+    
     return flask.render_template("lista_produtos.html", produtos=lista_de_produtos)
 
 
