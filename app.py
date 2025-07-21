@@ -10,7 +10,7 @@ def get_home():
 @app.get('/produtos')
 def get_produtos():
     sql_select_produtos = '''
-    SELECT img, preco, nome FROM produtos ORDER BY id DESC;
+    SELECT img, preco, nome FROM produtos ORDER BY preco DESC;
 '''
     with sqlite3.Connection('produtos.db') as conn:
         lista_de_produtos = conn.execute(sql_select_produtos)
@@ -37,5 +37,33 @@ def post_cadastrar():
         conn.execute(sql_inserir_produto, (nome, preco, img))
 
     return flask.redirect("/produtos")
+
+
+@app.get('/pesquisar')
+def get_pesquisar():
+    return flask.render_template("pesquisar.html")
+
+@app.post("/pesquisar")
+def post_pesquisar():
+    preco = flask.request.form["preco"]
+    nome = flask.request.form["nome"]
+    
+    sql_select_produtos_por_preco = f'''
+    SELECT img, preco, nome FROM produtos WHERE preco <= '{preco}' ORDER BY preco DESC;
+'''
+    sql_select_produtos_por_nome = f'''
+    SELECT img, preco, nome FROM produtos WHERE nome LIKE'%{nome}%' ORDER BY nome ASC;
+'''
+
+    with sqlite3.Connection('produtos.db') as conn:
+        if preco:
+            lista_de_produtos = conn.execute(sql_select_produtos_por_preco)
+        elif nome:
+            lista_de_produtos = conn.execute(sql_select_produtos_por_nome)
+        else:
+            lista_de_produtos = [('','0,00','não encontrado')]
+    
+    return flask.render_template("lista_produtos.html", produtos=lista_de_produtos)
+
 
 app.run(host='0.0.0.0', debug=True)
