@@ -31,10 +31,11 @@ form {
 <h1>Cadastro de produtos</h1>
 <form action="/cadastrar" method="post">
     Categoria: 
+
         <select name="categoria">
-            <option value="1">Papelaria</option>  
-            <option value="2">Vestuário</option>        
-            <option value="3">Outros</option>  
+        {% for id, nome in categorias %}
+            <option value="{{id}}">{{nome.capitalize()}}</option>  
+        {% endfor %}
         </select>
        
     Nome: <input type="text" name="nome">

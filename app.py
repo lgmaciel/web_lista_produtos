@@ -32,7 +32,13 @@ def get_categoria(id):
 
 @app.get("/cadastrar")
 def get_cadastrar():
-    return flask.render_template("cadastro_produtos.html")
+    with sqlite3.Connection('produtos.db') as conn:
+        sql_select_categorias = "SELECT id, nome FROM categorias;"
+        
+        lista_categorias = conn.execute(sql_select_categorias)
+        #retorno: [(1,'Papelaria'), (2, 'Vestuário'), (3, 'Outros')] 
+
+    return flask.render_template("cadastro_produtos.html", categorias = lista_categorias)
 
 
 @app.post("/cadastrar")
