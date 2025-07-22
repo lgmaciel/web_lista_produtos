@@ -1,11 +1,61 @@
 import flask
 import sqlite3
+from secrets import token_hex
 
 app = flask.Flask(__name__)
+# Token usado para gerar o valor do cookie de sessão para um usuário
+app.secret_key = token_hex()
 
 @app.get("/")
 def get_home():
     return flask.render_template("home.html")
+
+
+@app.get("/login")
+def get_login():
+    return flask.render_template("login.html")
+
+@app.post("/login")
+def post_login():
+    # Aqui vamos validar o login e criar a session do usuário
+    
+    # 1. recebemos os valores de login e senha do form de login
+    login = flask.request.form['login']
+    senha = flask.request.form['senha']
+    
+    # 2. consultar o banco para verificar se login e senha existem para o usuário
+    sql_validar_login = f'''
+    SELECT login, senha, nome, email
+    FROM usuarios
+    WHERE 
+        login="{login}" AND senha="{senha}";
+'''
+    print(sql_validar_login)
+    with sqlite3.Connection('produtos.db') as conn:
+        dados_usuario = conn.execute(sql_validar_login)
+        
+        # Resposta no formato: [(login, senha, nome, email),]
+
+        # se válido:
+        # 3. criar a sessão do usuário
+        try:
+            # se dados_usuário contiver uma tupla com login, senha, nome, email
+            login, _, nome, email = next(dados_usuario)
+            # usuário válido (temos dados dele)
+            # então criamos a sessão dele
+            flask.session["login"] = login
+            flask.session["nome"] = nome
+            flask.session["email"] = email        
+        except StopIteration:
+            # Login inválido (dados_usuario estava vazio)
+            return flask.redirect("/")
+        
+    return flask.redirect("/")
+
+@app.get("/logout")
+def get_logout():
+    flask.session.clear()
+    return flask.redirect('/')
 
 @app.get('/produtos')
 def get_produtos():

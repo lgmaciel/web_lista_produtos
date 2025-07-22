@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+
+    <style>
+    form {
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+    }    
+    </style>
+
 </head>
 <body>
 
@@ -23,12 +32,14 @@
     {% endif %}
 </nav>
 </header>
-<h1>Pesquisar</h1>
-<form action="/pesquisar" method="post">
-    Nome: <input type="text" name="nome">
-    Preço: <input type="text" name="preco">
 
-    <input type="submit" value="Pesquisar">
+<h1>Login</h1>
+
+<form action="/login" method="post">
+    login: <input type="text" name="login">
+    senha: <input type="password" name="senha">
+    <input type="submit" value="Login">
 </form>
+
 </body>
 </html>

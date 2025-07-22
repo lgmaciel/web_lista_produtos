@@ -2,6 +2,16 @@ import sqlite3
 
 conn = sqlite3.Connection('produtos.db')
 
+sql_criar_tabela_usuarios = '''
+CREATE TABLE IF NOT EXISTS usuarios (
+    id INTEGER PRIMARY KEY,
+    login TEXT NOT NULL,
+    senha TEXT NOT NULL,
+    nome TEXT,
+    email TEXT
+);
+'''
+
 sql_criar_tabela_categoria_produto = '''
 CREATE TABLE IF NOT EXISTS categorias (
     id INTEGER PRIMARY KEY,
@@ -19,10 +29,15 @@ CREATE TABLE IF NOT EXISTS produtos (
     FOREIGN KEY(id_categoria) REFERENCES categorias(id)
 );
 '''
+
+conn.execute(sql_criar_tabela_usuarios)
 conn.execute(sql_criar_tabela_categoria_produto)
 conn.execute(sql_criar_tabela_produtos)
 conn.commit()
 
+#
+# Cadastrando categorias iniciais
+#
 sql_insert_categorias = '''
 INSERT INTO categorias (nome) VALUES (?)
 '''
@@ -34,24 +49,16 @@ lista_de_categorias = [
 
 conn.executemany(sql_insert_categorias, lista_de_categorias)
 
-
+#
+# Cadastrando produtos iniciais
+#
 sql_insert_produtos = '''
 INSERT INTO produtos (img, preco, nome, id_categoria) VALUES (?, ?, ?, ?);
 '''
 lista_de_produtos = [
-    (
-        '1.jpg',
-        '150,00',
-        'Coisa 1',
-        '3'
-    ),
+    ('1.jpg','150,00','Coisa 1','3'),
 
-    (
-        '2.png',
-        '250,00',
-        'Coisa 2',
-        '2'
-    ),
+    ('2.png','250,00','Coisa 2','2'),
 
     (
         '3.jpg',
@@ -98,8 +105,20 @@ lista_de_produtos = [
 
 ]
 
-
 conn.executemany(sql_insert_produtos, lista_de_produtos)
-conn.commit()
 
+#
+# Cadastrando usuários iniciais
+#
+sql_insert_usuarios = '''
+INSERT INTO usuarios (login, senha, nome, email) VALUES (?,?,?,?);
+'''
+lista_de_usuarios = [
+    ('prof','12345', 'Prof. Gustavo', 'lgmaciel@senacrs.com.br'),
+    ('grz', 'tech@2025','Gustavo Razzera', 'grz@email.com')
+]
+
+conn.executemany(sql_insert_usuarios, lista_de_usuarios)
+
+conn.commit()
 conn.close()
