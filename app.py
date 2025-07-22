@@ -17,6 +17,18 @@ def get_produtos():
     
     return flask.render_template("lista_produtos.html", produtos=lista_de_produtos)
 
+@app.get("/categoria/<id>")
+def get_categoria(id):
+    sql_select_produtos = f'''
+    SELECT img, preco, nome FROM produtos 
+    WHERE produtos.id_categoria = {id}
+    ORDER BY nome;
+'''
+    with sqlite3.Connection('produtos.db') as conn:
+        lista_de_produtos = conn.execute(sql_select_produtos)
+    
+    return flask.render_template("lista_produtos.html", produtos=lista_de_produtos)
+
 
 @app.get("/cadastrar")
 def get_cadastrar():
@@ -29,14 +41,15 @@ def post_cadastrar():
     nome  = flask.request.form.get("nome")
     preco = flask.request.form.get("preco")
     img = flask.request.form.get("img")
+    categoria = flask.request.form.get("categoria")
 
     with sqlite3.Connection("produtos.db") as conn:
         sql_inserir_produto = '''
-        INSERT INTO produtos (nome, preco, img) VALUES (?,?,?);
+        INSERT INTO produtos (nome, preco, img, id_categoria) VALUES (?,?,?,?);
         ''' 
-        conn.execute(sql_inserir_produto, (nome, preco, img))
+        conn.execute(sql_inserir_produto, (nome, preco, img, categoria))
 
-    return flask.redirect("/produtos")
+    return flask.redirect(f"/categoria/{categoria}")
 
 
 @app.get('/pesquisar')

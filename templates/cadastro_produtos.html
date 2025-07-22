@@ -18,8 +18,11 @@ form {
 <header>
 <nav>
     <a href="/">Home</a>
-    <a href="/produtos">Produtos</a>
+    <a href="/categoria/1">Papelaria</a>
+    <a href="/categoria/2">Vestuário</a>
+    <a href="/categoria/3">Outros</a>
     <a href="/cadastrar">Cadastrar</a>
+    <a href="/pesquisar">Pesquisar</a>
 </nav>
 </header>
 
@@ -27,6 +30,13 @@ form {
 
 <h1>Cadastro de produtos</h1>
 <form action="/cadastrar" method="post">
+    Categoria: 
+        <select name="categoria">
+            <option value="1">Papelaria</option>  
+            <option value="2">Vestuário</option>        
+            <option value="3">Outros</option>  
+        </select>
+       
     Nome: <input type="text" name="nome">
     Preço: <input type="text" name="preco">
     Img: <input type="text" name="img">
