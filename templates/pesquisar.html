@@ -1,28 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
-</head>
-<body>
-
-<header>
-<nav>
-    <a href="/">Home</a>
-    <a href="/categoria/1">Papelaria</a>
-    <a href="/categoria/2">Vestuário</a>
-    <a href="/categoria/3">Outros</a>
-    <a href="/pesquisar">Pesquisar</a>
-    {% if session["login"] %}
-    <a href="/cadastrar">Cadastrar</a>    
-    <a href="/logout">Logout</a>    
-    {% else %}
-        <a href="/login">Login</a>
-    {% endif %}
-</nav>
-</header>
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block conteudo %}
 <h1>Pesquisar</h1>
 <form action="/pesquisar" method="post">
     Nome: <input type="text" name="nome">
@@ -30,5 +8,4 @@
 
     <input type="submit" value="Pesquisar">
 </form>
-</body>
-</html>
+{% endblock %}

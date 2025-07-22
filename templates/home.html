@@ -1,28 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}
+Home
+{% endblock %}
 
-<header>
-<nav>
-    <a href="/">Home</a>
-    <a href="/categoria/1">Papelaria</a>
-    <a href="/categoria/2">Vestuário</a>
-    <a href="/categoria/3">Outros</a>
-    <a href="/pesquisar">Pesquisar</a>
-    {% if session["login"] %}
-    <a href="/cadastrar">Cadastrar</a>    
-    <a href="/logout">Logout</a>    
-    {% else %}
-        <a href="/login">Login</a>
-    {% endif %}
-</nav>
-</header>
+{% block conteudo %}
 
-</body>
-</html>
+<h1>Home</h1>
+<p>Bem vindo à loja</p>
+
+{% endblock %}

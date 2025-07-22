@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>{% block title %}{% endblock %}</title>
+
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+    <style>
+    form {
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+    }    
+    </style>
+</head>
+<body>
+
+<header>
+<nav>
+    <a href="/">Home</a>
+    <a href="/categoria/1">Papelaria</a>
+    <a href="/categoria/2">Vestuário</a>
+    <a href="/categoria/3">Outros</a>
+    <a href="/pesquisar">Pesquisar</a>
+    {% if session["login"] %}
+    <a href="/cadastrar">Cadastrar</a>    
+    <a href="/logout">Logout</a>    
+    {% else %}
+        <a href="/login">Login</a>
+    {% endif %}    
+</nav>
+</header>
+<body>
+{% block conteudo %}
+{% endblock %}
+</body>
+</html>

@@ -1,37 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width='device-width', initial-scale=1.0">
-    <title>Cadastro de Produtos</title>
-    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
-</head>
-<style>
-form {
-    display: flex;
-    flex-direction: column;
-    width: 300px;
-}    
-</style>
-<body>
-
-<header>
-<nav>
-    <a href="/">Home</a>
-    <a href="/categoria/1">Papelaria</a>
-    <a href="/categoria/2">Vestuário</a>
-    <a href="/categoria/3">Outros</a>
-    <a href="/pesquisar">Pesquisar</a>
-    {% if session["login"] %}
-    <a href="/cadastrar">Cadastrar</a>    
-    <a href="/logout">Logout</a>    
-    {% else %}
-        <a href="/login">Login</a>
-    {% endif %}
-</nav>
-</header>
-
-
+{% extends "base.html" %}
+{% block title %}Lista de Produtos{% endblock %}
+{% block conteudo %}
 
 <h1>Cadastro de produtos</h1>
 <form action="/cadastrar" method="post">
@@ -49,5 +18,4 @@ form {
     <input type="submit" value="Cadastrar">
 </form>
 
-</body>
-</html>
+{% endblock %}
