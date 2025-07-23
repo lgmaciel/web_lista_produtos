@@ -80,6 +80,53 @@ def get_categoria(id):
     return flask.render_template("lista_produtos.html", produtos=lista_de_produtos)
 
 
+@app.get("/editar/<id_produto>")
+def editar_produto(id_produto):
+    with sqlite3.Connection('produtos.db') as conn:
+        sql_select_categorias = "SELECT id, nome FROM categorias;"
+        sql_dados_produto = f'''
+            SELECT id, nome, preco, img, id_categoria
+            FROM produtos
+            WHERE id = {id_produto}
+            '''
+        lista_categorias = conn.execute(sql_select_categorias)    
+        registro_produto = conn.execute(sql_dados_produto)
+
+        id, nome, preco, img, id_categoria = next(registro_produto)
+        dados_produto = {
+            "id": id,
+            "nome": nome,
+            "preco": preco,
+            "img": img,
+            "id_categoria": id_categoria
+        }
+
+        return flask.render_template("editar_produto.html",
+                                     categorias = lista_categorias,
+                                     produto = dados_produto)
+
+@app.post("/atualizar")
+def atualizar_produto():
+    id = flask.request.form['id']
+    nome = flask.request.form['nome']
+    preco = flask.request.form['preco']
+    img = flask.request.form['img']
+    id_categoria = flask.request.form['categoria']
+    
+    sql_atualizar_produto = f'''
+    UPDATE produtos 
+    SET img="{img}",
+        nome="{nome}",
+        preco="{preco}",
+        id_categoria="{id_categoria}"
+    WHERE produtos.id = {id}    
+'''
+    with sqlite3.Connection('produtos.db') as conn:
+        conn.execute(sql_atualizar_produto)
+        conn.commit()
+
+    return flask.redirect("/")
+
 @app.get("/cadastrar")
 def get_cadastrar():
     with sqlite3.Connection('produtos.db') as conn:
@@ -89,7 +136,6 @@ def get_cadastrar():
         #retorno: [(1,'Papelaria'), (2, 'Vestuário'), (3, 'Outros')] 
 
     return flask.render_template("cadastro_produtos.html", categorias = lista_categorias)
-
 
 @app.post("/cadastrar")
 def post_cadastrar():
@@ -106,7 +152,6 @@ def post_cadastrar():
         conn.execute(sql_inserir_produto, (nome, preco, img, categoria))
 
     return flask.redirect(f"/categoria/{categoria}")
-
 
 @app.get('/pesquisar')
 def get_pesquisar():
