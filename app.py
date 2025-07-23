@@ -60,7 +60,7 @@ def get_logout():
 @app.get('/produtos')
 def get_produtos():
     sql_select_produtos = '''
-    SELECT img, preco, nome FROM produtos ORDER BY preco DESC;
+    SELECT img, preco, nome, id FROM produtos ORDER BY preco DESC;
 '''
     with sqlite3.Connection('produtos.db') as conn:
         lista_de_produtos = conn.execute(sql_select_produtos)
@@ -70,7 +70,7 @@ def get_produtos():
 @app.get("/categoria/<id>")
 def get_categoria(id):
     sql_select_produtos = f'''
-    SELECT img, preco, nome FROM produtos 
+    SELECT img, preco, nome, id FROM produtos 
     WHERE produtos.id_categoria = {id}
     ORDER BY nome;
 '''
@@ -118,10 +118,10 @@ def post_pesquisar():
     nome = flask.request.form["nome"]
     
     sql_select_produtos_por_preco = f'''
-    SELECT img, preco, nome FROM produtos WHERE preco <= '{preco}' ORDER BY preco DESC;
+    SELECT img, preco, nome, id FROM produtos WHERE preco <= '{preco}' ORDER BY preco DESC;
 '''
     sql_select_produtos_por_nome = f'''
-    SELECT img, preco, nome FROM produtos WHERE nome LIKE'%{nome}%' ORDER BY nome ASC;
+    SELECT img, preco, nome, id FROM produtos WHERE nome LIKE'%{nome}%' ORDER BY nome ASC;
 '''
 
     with sqlite3.Connection('produtos.db') as conn:
@@ -134,5 +134,15 @@ def post_pesquisar():
     
     return flask.render_template("lista_produtos.html", produtos=lista_de_produtos)
 
+@app.get("/excluir/<id_produto>")
+def excluir_produto(id_produto):
+    sql_excluir_produto = f'''
+    DELETE FROM produtos WHERE id = {id_produto}
+'''
+    with sqlite3.Connection('produtos.db') as conn:        
+        conn.execute(sql_excluir_produto)
+        conn.commit()
+
+    return flask.redirect("/")
 
 app.run(host='0.0.0.0', debug=True)

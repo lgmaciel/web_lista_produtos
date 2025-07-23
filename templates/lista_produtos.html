@@ -10,7 +10,10 @@
         </aside>
         <h3> {{ produto[2] }} </h3>
         <h4>{{produto[1]}}</h4>
-        <a href="#" >Comprar</a>
+        <a href="#" >Comprar</a> 
+        {% if session['login'] %}
+            - <a href="/excluir/{{ produto[3] }}">Excluir</a>
+        {% endif %}
     </article>
     <!-- Fim card produto -->
     {% endfor %}    
